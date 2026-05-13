@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Poliponi Ticketing</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, Helvetica, sans-serif;
+    }
+
+    body{
+      background:#f5f7fb;
+      color:#111;
+      padding-bottom:120px;
+    }
+
+    .container{
+      width:100%;
+      max-width:600px;
+      margin:auto;
+      padding:18px;
+    }
+
+    /* HEADER */
+    .banner{
+      width:100%;
+      border-radius:24px;
+      overflow:hidden;
+      box-shadow:0 10px 25px rgba(0,0,0,0.08);
+      margin-bottom:28px;
+      background:#fff;
+    }
+
+    .banner img{
+      width:100%;
+      display:block;
+    }
+
+    /* TITLE */
+    .section-title{
+      font-size:30px;
+      font-weight:700;
+      margin-bottom:18px;
+      color:#111827;
+    }
+
+    /* CARD */
+    .ticket-grid{
+      display:grid;
+      gap:18px;
+    }
+
+    .ticket-card{
+      background:#fff;
+      border-radius:24px;
+      padding:22px;
+      box-shadow:
+      0 4px 10px rgba(0,0,0,0.04),
+      0 12px 30px rgba(0,0,0,0.05);
+      transition:0.25s ease;
+      border:1px solid #eef1f6;
+    }
+
+    .ticket-card:hover{
+      transform:translateY(-3px);
+    }
+
+    .ticket-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:15px;
+      margin-bottom:22px;
+    }
+
+    .ticket-name{
+      font-size:22px;
+      font-weight:700;
+      line-height:1.4;
+      color:#111827;
+    }
+
+    .badge{
+      background:#e8f0ff;
+      color:#356dff;
+      padding:8px 14px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      white-space:nowrap;
+    }
+
+    .divider{
+      height:1px;
+      background:#eceff5;
+      margin-bottom:22px;
+    }
+
+    .ticket-bottom{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:15px;
+      flex-wrap:wrap;
+    }
+
+    .price{
+      font-size:30px;
+      font-weight:800;
+      color:#111827;
+    }
+
+    .choose-btn{
+      border:none;
+      background:#356dff;
+      color:#fff;
+      padding:14px 24px;
+      border-radius:16px;
+      font-size:16px;
+      font-weight:700;
+      cursor:pointer;
+      transition:0.2s ease;
+      box-shadow:0 6px 18px rgba(53,109,255,0.25);
+    }
+
+    .choose-btn:hover{
+      transform:scale(1.03);
+    }
+
+    /* QUANTITY */
+    .quantity-box{
+      display:none;
+      align-items:center;
+      gap:14px;
+    }
+
+    .qty-btn{
+      width:42px;
+      height:42px;
+      border:none;
+      border-radius:14px;
+      background:#356dff;
+      color:#fff;
+      font-size:24px;
+      cursor:pointer;
+      transition:0.2s;
+    }
+
+    .qty-btn:hover{
+      transform:scale(1.05);
+    }
+
+    .qty-number{
+      min-width:24px;
+      text-align:center;
+      font-size:20px;
+      font-weight:700;
+    }
+
+    /* FOOTER BAR */
+    .checkout-bar{
+      position:fixed;
+      left:0;
+      right:0;
+      bottom:0;
+      background:#fff;
+      padding:18px;
+      box-shadow:0 -10px 30px rgba(0,0,0,0.08);
+      border-top-left-radius:24px;
+      border-top-right-radius:24px;
+    }
+
+    .checkout-content{
+      max-width:600px;
+      margin:auto;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:15px;
+    }
+
+    .checkout-text small{
+      display:block;
+      color:#6b7280;
+      margin-bottom:5px;
+      font-size:13px;
+    }
+
+    .checkout-total{
+      font-size:28px;
+      font-weight:800;
+      color:#111827;
+    }
+
+    .buy-btn{
+      border:none;
+      padding:16px 26px;
+      border-radius:18px;
+      font-size:16px;
+      font-weight:700;
+      cursor:pointer;
+      transition:0.25s ease;
+      background:#cdd7ff;
+      color:#fff;
+      pointer-events:none;
+    }
+
+    .buy-btn.active{
+      background:#356dff;
+      pointer-events:auto;
+      box-shadow:0 8px 22px rgba(53,109,255,0.35);
+    }
+
+    .buy-btn.active:hover{
+      transform:translateY(-2px);
+    }
+
+    @media(max-width:600px){
+
+      .ticket-name{
+        font-size:18px;
+      }
+
+      .price{
+        font-size:24px;
+      }
+
+      .checkout-content{
+        flex-direction:column;
+        align-items:stretch;
+      }
+
+      .buy-btn{
+        width:100%;
+      }
+
+      .checkout-text{
+        text-align:center;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- BANNER -->
+    <div class="banner">
+      <img src="banner-deskripsi.png" alt="Banner Event">
+    </div>
+
+    <!-- TITLE -->
+    <div class="section-title">
+      Kategori Tiket
+    </div>
+
+    <!-- TICKET GRID -->
+    <div class="ticket-grid">
+
+      <!-- CARD 1 -->
+      <div class="ticket-card">
+
+        <div class="ticket-top">
+          <div class="ticket-name">
+            Paket 4 Orang : Festival
+          </div>
+
+          <div class="badge">
+            ON SALE
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="ticket-bottom">
+
+          <div class="price">
+            Rp. 1.900.000
+          </div>
+
+          <button class="choose-btn" onclick="selectTicket(this, 1900000)">
+            Pilih Tiket
+          </button>
+
+          <div class="quantity-box">
+            <button class="qty-btn" onclick="changeQty(this, -1, 1900000)">-</button>
+            <div class="qty-number">1</div>
+            <button class="qty-btn" onclick="changeQty(this, 1, 1900000)">+</button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CARD 2 -->
+      <div class="ticket-card">
+
+        <div class="ticket-top">
+          <div class="ticket-name">
+            Paket 4 Orang : Premium
+          </div>
+
+          <div class="badge">
+            ON SALE
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="ticket-bottom">
+
+          <div class="price">
+            Rp. 2.900.000
+          </div>
+
+          <button class="choose-btn" onclick="selectTicket(this, 2900000)">
+            Pilih Tiket
+          </button>
+
+          <div class="quantity-box">
+            <button class="qty-btn" onclick="changeQty(this, -1, 2900000)">-</button>
+            <div class="qty-number">1</div>
+            <button class="qty-btn" onclick="changeQty(this, 1, 2900000)">+</button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CARD 3 -->
+      <div class="ticket-card">
+
+        <div class="ticket-top">
+          <div class="ticket-name">
+            Paket 4 Orang : Fast Track
+          </div>
+
+          <div class="badge">
+            ON SALE
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="ticket-bottom">
+
+          <div class="price">
+            Rp. 3.900.000
+          </div>
+
+          <button class="choose-btn" onclick="selectTicket(this, 3900000)">
+            Pilih Tiket
+          </button>
+
+          <div class="quantity-box">
+            <button class="qty-btn" onclick="changeQty(this, -1, 3900000)">-</button>
+            <div class="qty-number">1</div>
+            <button class="qty-btn" onclick="changeQty(this, 1, 3900000)">+</button>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CHECKOUT BAR -->
+  <div class="checkout-bar">
+
+    <div class="checkout-content">
+
+      <div class="checkout-text">
+        <small>Total Pembayaran</small>
+        <div class="checkout-total" id="totalPrice">
+          Rp. 0
+        </div>
+      </div>
+
+      <button class="buy-btn" id="buyButton">
+        Beli Sekarang
+      </button>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    let total = 0;
+
+    function formatRupiah(number){
+      return 'Rp. ' + number.toLocaleString('id-ID');
+    }
+
+    function updateTotal(){
+      document.getElementById('totalPrice').innerText = formatRupiah(total);
+
+      const buyButton = document.getElementById('buyButton');
+
+      if(total > 0){
+        buyButton.classList.add('active');
+
+        buyButton.onclick = function(){
+          window.location.href = 'https://poliponii2026.github.io/FORM-POLIPONI/';
+        }
+
+      }else{
+        buyButton.classList.remove('active');
+      }
+    }
+
+    function selectTicket(button, price){
+
+      const quantityBox = button.nextElementSibling;
+
+      button.style.display = 'none';
+      quantityBox.style.display = 'flex';
+
+      total += price;
+
+      updateTotal();
+    }
+
+    function changeQty(button, change, price){
+
+      const qtyElement = button.parentElement.querySelector('.qty-number');
+
+      let qty = parseInt(qtyElement.innerText);
+
+      qty += change;
+
+      if(qty <= 0){
+
+        qty = 0;
+
+        const quantityBox = button.parentElement;
+        const chooseButton = quantityBox.previousElementSibling;
+
+        quantityBox.style.display = 'none';
+        chooseButton.style.display = 'block';
+
+      }
+
+      qtyElement.innerText = qty;
+
+      total += (change * price);
+
+      if(total < 0){
+        total = 0;
+      }
+
+      updateTotal();
+    }
+
+  </script>
+
+</body>
+</html>
